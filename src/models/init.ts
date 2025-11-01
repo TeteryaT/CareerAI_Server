@@ -2,6 +2,7 @@ import { sequelize } from "../config/db";
 import { User } from "./userModel";
 import { Comment } from "./commentModel";
 import { Speciality } from "./specialityModel";
+import { Answer } from "./answerModel";
 import { setupAssociations } from "./Associations";
 
 export async function initializeModels(): Promise<void> {
@@ -19,4 +20,4 @@ export async function initializeModels(): Promise<void> {
   }
 }
 
-export { sequelize, User, Comment, Speciality };
+export { sequelize, User, Comment, Speciality, Answer };

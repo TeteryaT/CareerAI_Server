@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
-const secret: string | undefined = process.env.JWT_SECRET;
+
 export const generateAccessToken = (id: number) => {
+  const secret = process.env.JWT_SECRET;
   const payload = {
     id,
   };

@@ -30,8 +30,8 @@ export const validatePassword = (
   return { isValid: true };
 };
 const schema = Joi.object({
-  name: Joi.string().alphanum().required(),
-  surname: Joi.string().alphanum().required(),
+  name: Joi.string().required(),
+  surname: Joi.string().required(),
   phone: Joi.string()
     .pattern(new RegExp("^\\+375(17|25|29|33|44)\\d{7}$"))
     .required(),
