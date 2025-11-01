@@ -3,20 +3,25 @@ import { sequelize } from "../config/db";
 
 interface UserAttributes {
   id: number;
-  username: string;
+  name: string;
+  surname: string;
+  phone: string;
   email: string;
   password: string;
   role: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, "id"> {}
 
 export class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {
   public id!: number;
-  public username!: string;
+  public name!: string;
+  public surname!: string;
+  public phone!: string;
   public email!: string;
   public password!: string;
   public role!: string;
@@ -29,7 +34,15 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    surname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
-import { sequelize } from "./config/db";
 import app from "./app";
 import "./models/userModel";
 import "./models/specialityModel";
+import { initializeModels, sequelize } from "./models/init";
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ const start = async () => {
     await sequelize.authenticate();
     console.log("Подключение к PostgreSQL установлено.");
 
-    await sequelize.sync();
+    await initializeModels();
     console.log("Модели синхронизированы.");
 
     app.listen(PORT, () => {
