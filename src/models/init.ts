@@ -4,6 +4,7 @@ import { Comment } from "./commentModel";
 import { Speciality } from "./specialityModel";
 import { Answer } from "./answerModel";
 import { setupAssociations } from "./Associations";
+import { History } from "./historyModel";
 import bcrypt from "bcrypt";
 
 export async function initializeModels(): Promise<void> {
@@ -42,4 +43,4 @@ export async function initializeModels(): Promise<void> {
   }
 }
 
-export { sequelize, User, Comment, Speciality, Answer };
+export { sequelize, User, Comment, Speciality, Answer, History };

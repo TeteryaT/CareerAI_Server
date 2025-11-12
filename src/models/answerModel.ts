@@ -5,6 +5,7 @@ interface AnswerAttributes {
   id: number;
   text: string;
   date: Date;
+  commentId: Number;
 }
 
 export interface AnswerCreationAttributes
@@ -17,6 +18,7 @@ export class Answer
   public id!: number;
   public text!: string;
   public date!: Date;
+  public commentId!: number;
 }
 
 Answer.init(
@@ -32,6 +34,10 @@ Answer.init(
     },
     date: {
       type: DataTypes.DATE,
+      allowNull: false,
+    },
+    commentId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
