@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { History } from "../../models/historyModel";
 import { User } from "../../models/userModel";
-
+interface PythonResponse {
+  results: any[];
+  ai: string;
+}
 interface RecommendationInput {
   subjects: string[];
   region: string;
@@ -11,56 +14,51 @@ interface RecommendationInput {
   dormitory: string;
 }
 
+import axios from "axios";
+
 export const getRecommendations = async (req: Request, res: Response) => {
   try {
-    const data: RecommendationInput = req.body;
+    const data = req.body;
 
     const user = req.user as any;
     if (!user) return res.status(401).json({ error: "Не авторизован" });
 
-    console.log("Входные данные:", data, "Пользователь:", user.id);
+    console.log("Входные данные:", data);
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const pythonRes = await axios.post("http://127.0.0.1:5050/recommend", data);
 
-    const recommendations = [
-      {
-        university: "ВГУ им. П.М. Машерова",
-        specialty: "Прикладная математика",
-        score: 316,
-      },
-      {
-        university: "ВГУ им. П.М. Машерова",
-        specialty: "Программная инженерия",
-        score: 377,
-      },
-      {
-        university: "Могилёвский госуниверситет",
-        specialty: "Физико-математическое образование",
-        score: 193,
-      },
-    ];
+    const { results, ai } = pythonRes.data as PythonResponse;
+    console.log("Полученные данные:", results);
+    console.log("Полученные данные ИИ:", ai);
 
-    const today = new Date();
+    const cleanedResults = results.filter(
+      (r) => r.university && r.specialty && r.score
+    );
 
-    for (const rec of recommendations) {
+    for (const rec of cleanedResults) {
       await History.create({
         university: rec.university,
         specialty: rec.specialty,
         score: rec.score,
+
         ct_subject1: data.subjects[0] || "",
         ct_subject2: data.subjects[1] || "",
         ct_subject3: data.subjects[2] || "",
+
         sum_points: data.score,
         dormitory: data.dormitory,
         education_form: data.studyForm,
         payment_form: data.paymentForm,
         location: data.region,
-        date: today,
+        date: new Date(),
         user_id: user.id,
       });
     }
 
-    return res.json(recommendations);
+    return res.json({
+      recommendations: results,
+      ai,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Ошибка сервера" });
